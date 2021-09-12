@@ -28,6 +28,49 @@ import csv
 """
 El controlador se encarga de mediar entre la vista y el modelo.
 """
+def initCatalog():
+    """
+    Llama la funcion de inicializacion del catalogo del modelo.
+    """
+    catalog = model.newCatalog()
+    return catalog
+
+
+# Funciones para la carga de datos
+
+
+def loadData(catalog):
+    """
+    Carga los datos de los archivos y cargar los datos en la
+    estructura de datos
+    """
+    loadArtists(catalog)
+    loadArtworks(catalog)
+
+
+def loadArtists(catalog):
+    """
+    Carga los libros del archivo.  Por cada libro se toman sus autores y por
+    cada uno de ellos, se crea en la lista de autores, a dicho autor y una
+    referencia al libro que se esta procesando.
+    """
+    artistsfile = cf.data_dir + 'Artists-utf8-5pct.csv'
+    input_file = csv.DictReader(open(artistsfile, encoding='utf-8'))
+    for artist in input_file:
+        model.addArtists(catalog, artist)
+
+
+def loadArtworks(catalog):
+    """
+    Carga todos los tags del archivo y los agrega a la lista de tags
+    """
+    artworksfile = cf.data_dir + 'Artworks-utf8-5pct.csv'
+    input_file = csv.DictReader(open(artworksfile, encoding='utf-8'))
+    for work in input_file:
+        model.addArtworks(catalog, work)
+
+
+
 
 # Inicialización del Catálogo de libros
 

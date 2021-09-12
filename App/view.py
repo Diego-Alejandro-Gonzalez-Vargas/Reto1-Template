@@ -25,6 +25,7 @@ import sys
 import controller
 from DISClib.ADT import list as lt
 assert cf
+from time import process_time
 
 
 """
@@ -37,9 +38,26 @@ operación solicitada
 def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
-    print("2- ")
+    print("2- Listar cronológicamente los artistas")
+    print("3- Listar cronológicamente las adquisiones")
+    print("4- Clasificar las obras de un artista por tecnica")
+    print("5- Clasificar las obras por la nacionalidad de sus creadores")
+    print("6- Transportar obras de un departamento")
+    print("7- Proponer una nueva exposicion en el museo")
+    print("8- SALIR")
 
-catalog = None
+def initCatalog():
+    """
+    Inicializa el catalogo de libros
+    """
+    return controller.initCatalog()
+
+
+def loadData(catalog):
+    """
+    Carga los libros en la estructura de datos
+    """
+    controller.loadData(catalog)
 
 """
 Menu principal
@@ -49,6 +67,24 @@ while True:
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
+        catalog = initCatalog()
+        t1 = process_time()
+        loadData(catalog)
+        t2 = process_time()
+        print('Artistas cargados: ' + str(lt.size(catalog['Artists'])))
+        print('Obras cargadas: ' + str(lt.size(catalog['Artworks'])))
+        print("Time = " + str(t2 - t1) + "seg")
+        artistas = catalog['Artists']
+        #bestbooks = lt.newList()
+        for cont in range(1, 4):
+            artista = lt.getElement(artistas, lt.size(catalog['Artists'])-cont)
+            print(artista)
+        obras = catalog['Artworks']
+        for cont in range(1, 4):
+            obra = lt.getElement(obras, lt.size(catalog['Artworks'])-cont)
+            print(obra)
+
+
 
     elif int(inputs[0]) == 2:
         pass
