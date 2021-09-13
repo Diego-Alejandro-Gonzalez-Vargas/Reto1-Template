@@ -25,8 +25,9 @@ import sys
 import controller
 from DISClib.ADT import list as lt
 assert cf
+from DISClib.Algorithms.Sorting import shellsort as sa
 from time import process_time
-
+from prettytable import PrettyTable, ALL
 
 """
 La vista se encarga de la interacción con el usuario
@@ -46,18 +47,86 @@ def printMenu():
     print("7- Proponer una nueva exposicion en el museo")
     print("8- SALIR")
 
-def initCatalog():
+def printMenuED():
+    print("1- Cargar información por ARRAY_LIST")
+    print("2- Cargar información por SINGLE-LINKED")
+    
+
+def initCatalogA():
     """
     Inicializa el catalogo de libros
     """
-    return controller.initCatalog()
+    return controller.initCatalogA()
 
+def initCatalogS():
+    """
+    Inicializa el catalogo de libros
+    """
+    return controller.initCatalogS()
 
 def loadData(catalog):
     """
     Carga los libros en la estructura de datos
     """
     controller.loadData(catalog)
+
+def funcionReqUno(catalog, minimo, maximo):
+    ordenado = sa.sort(catalog['Artists'],cmpFunctionRuno)
+    indexmin = binary_search_max(ordenado, minimo)
+    indexmax = binary_search_max(ordenado, maximo)
+    n= indexmax - indexmin
+    print("El total de artistas encontrados es: " + str(n))
+    x = PrettyTable()
+    x.field_names = (["ConstituentID","DisplayName","BeginDate","Nationality","Gender","ArtistBio","Wiki QID","ULAN"])
+    x.max_width = 25
+    x.hrules=ALL
+
+    for i in range(indexmax-2, indexmax+1):
+        artista = lt.getElement(ordenado, i)
+        
+        x.add_row([artista["ConstituentID"], artista["DisplayName"], artista["BeginDate"],
+                   artista["Nationality"], artista["Gender"], artista["ArtistBio"], 
+                   artista["Wiki QID"], artista["ULAN"]])
+    for i in range(indexmin, indexmin+3):
+        artista = lt.getElement(ordenado, i)
+        
+        x.add_row([artista["ConstituentID"], artista["DisplayName"], artista["BeginDate"],
+                   artista["Nationality"], artista["Gender"], artista["ArtistBio"], 
+                   artista["Wiki QID"], artista["ULAN"]])
+
+
+
+
+def binary_search_max(arr, x):
+    """
+    CODIGO SACADO DE: https://www.geeksforgeeks.org/python-program-for-binary-search/
+    """
+    low = 0
+    high = len(arr) - 1
+    mid = 0
+ 
+    while low <= high:
+ 
+        mid = (high + low) // 2
+ 
+        # If x is greater, ignore left half
+        if lt.getElement(arr, mid)["BeginDate"] < x:
+            low = mid + 1
+ 
+        # If x is smaller, ignore right half
+        elif lt.getElement(arr, mid)["BeginDate"] > x:
+            high = mid - 1
+ 
+        # means x is present at mid
+        else:
+            return mid
+ 
+    # If we reach here, then the element was not present
+    return mid
+
+
+def cmpFunctionRuno(anouno, anodos):
+    return (float(anouno["BeginDate"]) < float(anodos["BeginDate"]))
 
 """
 Menu principal
@@ -66,16 +135,24 @@ while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
+        printMenuED()
+        ed = input(print("Cual desea escojer:\n"))
+        if int(ed)==1:
+            catalog = initCatalogA()
+            t1 = process_time()
+            loadData(catalog)
+            t2 = process_time()
+        elif int(ed)==2:
+            catalog = initCatalogS()
+            t1 = process_time()
+            loadData(catalog)
+            t2 = process_time()
         print("Cargando información de los archivos ....")
-        catalog = initCatalog()
-        t1 = process_time()
-        loadData(catalog)
-        t2 = process_time()
+        
         print('Artistas cargados: ' + str(lt.size(catalog['Artists'])))
         print('Obras cargadas: ' + str(lt.size(catalog['Artworks'])))
         print("Time = " + str(t2 - t1) + "seg")
         artistas = catalog['Artists']
-        #bestbooks = lt.newList()
         for cont in range(1, 4):
             artista = lt.getElement(artistas, lt.size(catalog['Artists'])-cont)
             print(artista)
@@ -87,7 +164,9 @@ while True:
 
 
     elif int(inputs[0]) == 2:
-        pass
+        minimo=input(print("Año Inicial:\n"))
+        maximo=input(print("Año Final:\n"))
+        funcionReqUno(catalog, minimo, maximo)
 
     else:
         sys.exit(0)

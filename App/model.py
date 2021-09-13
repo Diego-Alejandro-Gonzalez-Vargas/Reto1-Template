@@ -36,7 +36,7 @@ los mismos.
 """
 
 
-def newCatalog():
+def newCatalogA():
     """
     Inicializa el catálogo de libros. Crea una lista vacia para guardar
     todos los libros, adicionalmente, crea una lista vacia para los autores,
@@ -52,7 +52,21 @@ def newCatalog():
 
     return catalog
 
+def newCatalogS():
+    """
+    Inicializa el catálogo de libros. Crea una lista vacia para guardar
+    todos los libros, adicionalmente, crea una lista vacia para los autores,
+    una lista vacia para los generos y una lista vacia para la asociación
+    generos y libros. Retorna el catalogo inicializado.
+    """
+    catalog = {'Artists': None,
+               'Artworks': None,}
 
+    catalog['Artists'] = lt.newList('ARRAY_LIST')
+    catalog['Artworks'] = lt.newList('ARRAY_LIST')
+
+
+    return catalog
 # Funciones para agregar informacion al catalogo
 
 def addArtists(catalog, artist):
