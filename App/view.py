@@ -71,62 +71,32 @@ def loadData(catalog):
     controller.loadData(catalog)
 
 def funcionReqUno(catalog, minimo, maximo):
-    ordenado = sa.sort(catalog['Artists'],cmpFunctionRuno)
-    indexmin = binary_search_max(ordenado, minimo)
-    indexmax = binary_search_max(ordenado, maximo)
-    n= indexmax - indexmin
-    print("El total de artistas encontrados es: " + str(n))
+    ordenado= controller.funcionReqUno(catalog,minimo,maximo)
+    print("la cantidad de artistas encontrados es:" +str(lt.size(ordenado)))
     x = PrettyTable()
     x.field_names = (["ConstituentID","DisplayName","BeginDate","Nationality","Gender","ArtistBio","Wiki QID","ULAN"])
     x.max_width = 25
     x.hrules=ALL
 
-    for i in range(indexmax-2, indexmax+1):
+    for i in range(1, 4):
         artista = lt.getElement(ordenado, i)
         
         x.add_row([artista["ConstituentID"], artista["DisplayName"], artista["BeginDate"],
                    artista["Nationality"], artista["Gender"], artista["ArtistBio"], 
                    artista["Wiki QID"], artista["ULAN"]])
-    for i in range(indexmin, indexmin+3):
+    for i in range((lt.size(ordenado)-2), lt.size(ordenado)+1):
         artista = lt.getElement(ordenado, i)
         
         x.add_row([artista["ConstituentID"], artista["DisplayName"], artista["BeginDate"],
                    artista["Nationality"], artista["Gender"], artista["ArtistBio"], 
                    artista["Wiki QID"], artista["ULAN"]])
+    print(x)
 
 
 
 
-def binary_search_max(arr, x):
-    """
-    CODIGO SACADO DE: https://www.geeksforgeeks.org/python-program-for-binary-search/
-    """
-    low = 0
-    high = len(arr) - 1
-    mid = 0
- 
-    while low <= high:
- 
-        mid = (high + low) // 2
- 
-        # If x is greater, ignore left half
-        if lt.getElement(arr, mid)["BeginDate"] < x:
-            low = mid + 1
- 
-        # If x is smaller, ignore right half
-        elif lt.getElement(arr, mid)["BeginDate"] > x:
-            high = mid - 1
- 
-        # means x is present at mid
-        else:
-            return mid
- 
-    # If we reach here, then the element was not present
-    return mid
 
 
-def cmpFunctionRuno(anouno, anodos):
-    return (float(anouno["BeginDate"]) < float(anodos["BeginDate"]))
 
 """
 Menu principal

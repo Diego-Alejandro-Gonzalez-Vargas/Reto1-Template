@@ -62,8 +62,8 @@ def newCatalogS():
     catalog = {'Artists': None,
                'Artworks': None,}
 
-    catalog['Artists'] = lt.newList('ARRAY_LIST')
-    catalog['Artworks'] = lt.newList('ARRAY_LIST')
+    catalog['Artists'] = lt.newList('SINGLE_LINKED')
+    catalog['Artworks'] = lt.newList('SINGLE_LINKED')
 
 
     return catalog
@@ -96,3 +96,73 @@ def addArtworks(catalog, artwork):
 
     # Se obtienen los autores del libro
     # ID = artist['Constituent ID']
+def funcionReqUno(catalog,minimo,maximo):
+    ordenado = sa.sort(catalog['Artists'],cmpFunctionRuno)
+    indexmin = binary_search_min(ordenado, int(minimo))
+    indexmax = binary_search_max(ordenado, int(maximo))
+    cant= indexmax-indexmin
+    la_lista = lt.subList(ordenado, indexmin,cant)
+    return la_lista
+
+
+def binary_search_max(arr, x):
+    """
+    CODIGO SACADO DE: https://www.geeksforgeeks.org/python-program-for-binary-search/
+    https://stackoverflow.com/questions/13197552/using-binary-search-with-sorted-array-with-duplicates
+    """
+    low = 0
+    high = lt.size(arr) - 1
+    mid = 0
+    rta=0
+ 
+    while low <= high:
+ 
+        mid = int((high - low) / 2 + low)
+        ele=lt.getElement(arr, mid)
+ 
+        # If x is greater, ignore left half
+        if int(ele["BeginDate"]) > x:
+            high = mid - 1
+ 
+        # If x is smaller, ignore right half
+        elif int(ele["BeginDate"]) == x:
+            rta=mid
+            low = mid + 1
+        else:
+            low = mid + 1
+    if rta == 0:
+        rta= lt.size(arr) + 1
+    return rta
+
+def binary_search_min(arr, x):
+    """
+    CODIGO SACADO DE: https://www.geeksforgeeks.org/python-program-for-binary-search/
+    https://stackoverflow.com/questions/13197552/using-binary-search-with-sorted-array-with-duplicates
+    """
+    low = 0
+    high = lt.size(arr) - 1
+    mid = 0
+    rta=0
+ 
+    while low <= high:
+ 
+        mid = int((high - low) / 2 + low)
+        ele=lt.getElement(arr, mid)
+ 
+        # If x is greater, ignore left half
+        if int(ele["BeginDate"]) > x:
+            high = mid - 1
+ 
+        # If x is smaller, ignore right half
+        elif int(ele["BeginDate"]) == x:
+            rta=mid
+            high = mid - 1
+        else:
+            low = mid + 1
+    if rta == 0:
+        rta=1
+    return rta
+
+
+def cmpFunctionRuno(anouno, anodos):
+    return (int(anouno["BeginDate"]) < int(anodos["BeginDate"]))

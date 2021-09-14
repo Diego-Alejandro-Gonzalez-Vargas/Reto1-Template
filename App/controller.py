@@ -76,7 +76,8 @@ def loadArtworks(catalog):
         model.addArtworks(catalog, work)
 
 
-
+def funcionReqUno(catalog,minimo,maximo):
+    return model.funcionReqUno(catalog,minimo,maximo)
 
 # Inicialización del Catálogo de libros
 
