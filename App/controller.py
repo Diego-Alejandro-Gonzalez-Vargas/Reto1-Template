@@ -25,6 +25,7 @@ import model
 import csv
 
 
+
 """
 El controlador se encarga de mediar entre la vista y el modelo.
 """
@@ -64,6 +65,8 @@ def loadArtists(catalog):
     input_file = csv.DictReader(open(artistsfile, encoding='utf-8'))
     for artist in input_file:
         model.addArtists(catalog, artist)
+        model.addArtists_Artworks(catalog, artist)
+    catalog['Artists_Artworks']=model.sortAux(catalog)
 
 
 def loadArtworks(catalog):
@@ -74,10 +77,14 @@ def loadArtworks(catalog):
     input_file = csv.DictReader(open(artworksfile, encoding='utf-8'))
     for work in input_file:
         model.addArtworks(catalog, work)
+        model.addObject(catalog,work)
 
 
 def funcionReqUno(catalog,minimo,maximo):
     return model.funcionReqUno(catalog,minimo,maximo)
+
+def funcionReqDos(catalog, minimo, maximo):
+    return model.funcionReqDos(catalog, minimo, maximo)
 
 # Inicialización del Catálogo de libros
 

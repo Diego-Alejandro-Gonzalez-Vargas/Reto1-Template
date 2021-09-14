@@ -92,7 +92,38 @@ def funcionReqUno(catalog, minimo, maximo):
                    artista["Wiki QID"], artista["ULAN"]])
     print(x)
 
+def funcionReqDos(catalog, minimo, maximo):
+    lista_f = controller.funcionReqDos(catalog, minimo, maximo)
+    size = lt.size(lista_f)
+    print("Se encontraron "+str(size)+"obras en ese rango de fechas")
+    x = PrettyTable()
+    
+    x.field_names = (["ObjectID","Title","Artists", "Medium", "Dimensions",
+                      "DateAcquired", "URL"])
+    x.max_width = 25
+    x.hrules=ALL
 
+    if size >= 6:
+        for i in range(1, 4):
+            artwork = lt.getElement(lista_f, i)
+            
+            x.add_row([artwork["ObjectID"], artwork["Title"], artwork["Artists"],
+                    artwork["Medium"], artwork["Dimensions"], artwork["DateAcquired"], 
+                    artwork["URL"]])
+
+        for i in range(size-2, size+1):
+            artwork = lt.getElement(lista_f, i)
+            x.add_row([artwork["ObjectID"], artwork["Title"], artwork["Artists"],
+                    artwork["Medium"], artwork["Dimensions"], artwork["DateAcquired"], 
+                    artwork["URL"]])
+    
+    else:
+        for i in range(1,size+1):
+            artwork = lt.getElement(lista_f, i)
+            x.add_row([artwork["ObjectID"], artwork["Title"], artwork["Artists"],
+                        artwork["Medium"], artwork["Dimensions"], artwork["DateAcquired"], 
+                        artwork["URL"]])
+    print(x)
 
 
 
@@ -130,6 +161,10 @@ while True:
         for cont in range(1, 4):
             obra = lt.getElement(obras, lt.size(catalog['Artworks'])-cont)
             print(obra)
+        otra = catalog['Artists_Artworks']
+        for cont in range(1, 4):
+            obra = lt.getElement(otra, lt.size(catalog['Artists_Artworks'])-cont)
+            print(obra)
 
 
 
@@ -137,7 +172,10 @@ while True:
         minimo=input(print("Año Inicial:\n"))
         maximo=input(print("Año Final:\n"))
         funcionReqUno(catalog, minimo, maximo)
-
+    elif int(inputs[0]) == 3:
+        minimo=input(print("Fecha Inicial:\n"))
+        maximo=input(print("Fecha Final:\n"))
+        funcionReqDos(catalog, minimo, maximo)
     else:
         sys.exit(0)
 sys.exit(0)
