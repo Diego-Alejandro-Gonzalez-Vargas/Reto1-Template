@@ -131,7 +131,7 @@ def binary_search_max(arr, x):
         else:
             low = mid + 1
     if rta == 0:
-        rta= lt.size(arr) + 1
+        rta= mid+2
     return rta
 
 def binary_search_min(arr, x):
@@ -160,7 +160,7 @@ def binary_search_min(arr, x):
         else:
             low = mid + 1
     if rta == 0:
-        rta=1
+        rta=mid
     return rta
 
 
