@@ -292,9 +292,10 @@ def cambiarTADmedios(arr, x):
             coso= int(o["Count"])
             cambio= coso + 1
             cambiodict = {
-                'Medium'
+                'Medium': o["Medium"],
+                'Count': cambio
             } 
-            lt.changeInfo(arr,i,)
+            lt.changeInfo(arr,n,cambiodict)
 
             
         
