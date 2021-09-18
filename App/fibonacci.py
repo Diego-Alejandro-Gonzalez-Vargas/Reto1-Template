@@ -1,5 +1,6 @@
 import sys
-
+import matplotlib.pyplot as pl
+import pandas as pd
 def fibonacci(n):
     if n <=1:
         if n==1:
@@ -21,4 +22,7 @@ def fibonacci(n):
 print(fibonacci(8))
 
 
+#GRAFICA PARA FISISCA 1:
 
+datos=pd.read_csv("//Data/fisica.csv")
+print(datos.head())

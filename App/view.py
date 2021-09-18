@@ -125,6 +125,8 @@ def funcionReqDos(catalog, minimo, maximo):
                         artwork["URL"]])
     print(x)
 
+def funcionReqTres(catalog, nombre):
+    lista_f = controller.funcionReqTres(catalog, nombre)
 
 
 
@@ -176,6 +178,9 @@ while True:
         minimo=input(print("Fecha Inicial:\n"))
         maximo=input(print("Fecha Final:\n"))
         funcionReqDos(catalog, minimo, maximo)
+    elif int(inputs[0]) == 4:
+        nombre=input(print("Fecha Inicial:\n"))
+        funcionReqTres(catalog, nombre)
     else:
         sys.exit(0)
 sys.exit(0)

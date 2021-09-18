@@ -85,6 +85,9 @@ def funcionReqUno(catalog,minimo,maximo):
 
 def funcionReqDos(catalog, minimo, maximo):
     return model.funcionReqDos(catalog, minimo, maximo)
+    
+def funcionReqTres(catalog, nombre):
+    return model.funcionReqTres(catalog, nombre)
 
 # Inicialización del Catálogo de libros
 

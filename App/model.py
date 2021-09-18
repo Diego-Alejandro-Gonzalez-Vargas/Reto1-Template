@@ -25,6 +25,7 @@
  """
 
 
+from DISClib.DataStructures.arraylist import getElement
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
@@ -86,7 +87,7 @@ def addArtists_Artworks(catalog, artist):
     }
     lt.addLast(catalog['Artists_Artworks'], artista)
 
-
+#CODIGO DONDE SE AGREGAN LOS OBJETOS A LOS AUTORES!!
 def addObject(catalog,work):
     p = work["ConstituentID"]
     byecorchetes = p.replace("[","")
@@ -124,7 +125,8 @@ def addArtworks(catalog, artwork):
         'Height (cm)':artwork['Height (cm)'],
         'Length (cm)':artwork['Length (cm)'],
         'Weight (kg)':artwork['Weight (kg)'],
-        'Width (cm)':artwork['Width (cm)']
+        'Width (cm)':artwork['Width (cm)'],
+        'Classification':artwork['Classification']
     }
     lt.addLast(catalog['Artworks'], obra)
 
@@ -257,6 +259,54 @@ def funcionReqDos(catalog, minimo, maximo):
         lt.addLast(la_rta,agregar)
     return la_rta
 
+def funcionReqTres(catalog, nombre):
+    index = normal_search_nombre(catalog['Artists_Artworks'],nombre)
+    autor = lt.getElement(catalog['Artists_Artworks'],index)
+    objetos = autor["ObjectID"]
+    lt_objetos = objetos.split(",")
+    ordenado = sa.sort(catalog["Artworks"], cmpobjectid)
+    tad_objetos = lt.newList("ARRAY_LIST")
+    tad_medios = lt.newList("ARRAY_LIST")
+    for i in lt_objetos:
+        index = binary_search_id(ordenado, i)
+        elemento = lt.getElement(ordenado, index)
+        agregar = {
+            'ObjectID':elemento['ObjectID'],
+            'Title':elemento['Title'],
+            'Medium':elemento['Medium'],
+            'Dimensions':elemento['Dimensions'],
+            'DateAcquired':elemento['DateAcquired'],
+            'Department':elemento['Department'],
+            'Classification':elemento['Classification'],
+            'URL':elemento['URL']
+        }
+        lt.addLast(tad_objetos, agregar)
+        cambiarTADmedios(tad_medios,elemento['Medium'])
+
+
+def cambiarTADmedios(arr, x):
+    medios  = lt.size(arr)
+    for n in range(1, medios+1):
+        o = getElement(arr, n)
+        if (o["Medium"] == x):
+            coso= int(o["Count"])
+            cambio= coso + 1
+            cambiodict = {
+                'Medium'
+            } 
+            lt.changeInfo(arr,i,)
+
+            
+        
+
+def normal_search_nombre(arr, x):
+    largo  = lt.size(arr)
+
+    for artista in range(1,largo+1):
+        name = artista["DisplayName"]
+        if (name == x):
+            return artista
+
 def binary_search_max2(arr, x):
     """
     CODIGO SACADO DE: https://www.geeksforgeeks.org/python-program-for-binary-search/
@@ -327,8 +377,40 @@ def binary_search_min2(arr, x):
         rta= mid+2
     return rta
 
+def binary_search_id(arr, x):
+    low = 0
+    high = lt.size(arr) - 1
+    mid = 0
+ 
+    while low <= high:
+ 
+        mid = (high + low) // 2
+        comp= lt.getElement(arr,mid)
+        ahorasi=int(comp["ObjectID"])
+ 
+        # If x is greater, ignore left half
+        if ahorasi < x:
+            low = mid + 1
+ 
+        # If x is smaller, ignore right half
+        elif ahorasi > x:
+            high = mid - 1
+ 
+        # means x is present at mid
+        else:
+            return mid
+ 
+    # If we reach here, then the element was not present
+    return -1
+
+
+
+
 def cmpFunctionRuno(anouno, anodos):
     return (int(anouno["BeginDate"]) < int(anodos["BeginDate"]))
+
+def cmpobjectid(iduno, iddos):
+    return (int(iduno["ObjectID"]) < int(iddos["ObjectID"]))
 
 def cmpFunctionIndice(artist1, artist2):
     return (int(artist1["ConstituentID"]) < int(artist2["ConstituentID"]))
