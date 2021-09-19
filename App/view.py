@@ -127,24 +127,46 @@ def funcionReqDos(catalog, minimo, maximo):
 
 def funcionReqTres(catalog, nombre):
     tad_medios,tad_obras = controller.funcionReqTres(catalog, nombre)
-    size = lt.size(tad_medios)
-    x = PrettyTable()
-    
-    x.field_names = (["Medium","Count"])
-    x.max_width = 25
-    x.hrules=ALL
-
-    if size >= 5:
-        for i in range(1, 6):
-            medio = lt.getElement(tad_medios, i)
-            
-            x.add_row([medio["Medium"], medio["Count"]])
-    
+    if tad_medios=="NOHAYOBRAS":
+        print("NO HAY OBRAS DE ESTE AUTOR")
+    elif tad_medios=="NOHAYAUTOR":
+        print("NO existe ese AUTOR")
     else:
-        for i in range(1,size+1):
-            medio = lt.getElement(tad_medios, i)
-            x.add_row([medio["Medium"], medio["Count"]])
-    print(x)
+        size = lt.size(tad_medios)
+        x = PrettyTable()  
+        x.field_names = (["Medium","Count"])
+        x.max_width = 25
+        x.hrules=ALL
+        if size >= 5:
+            for i in range(1, 6):
+                medio = lt.getElement(tad_medios, i)
+                x.add_row([medio["Medium"], medio["Count"]])
+    
+        else:
+            for i in range(1,size+1):
+                medio = lt.getElement(tad_medios, i)
+                x.add_row([medio["Medium"], medio["Count"]])
+        print(x)
+        sizes = lt.size(tad_obras)
+        y = PrettyTable()
+        y.field_names = (["ObjectID","Title", "Medium", "Dimensions",
+                      "DateAcquired", "Classification", "URL"])
+        y.max_width = 25
+        y.hrules=ALL
+        if sizes >= 3:
+            for i in range(1, 4):
+                artwork = lt.getElement(tad_obras, i)
+            
+                y.add_row([artwork["ObjectID"], artwork["Title"], 
+                        artwork["Medium"], artwork["Dimensions"], artwork["DateAcquired"],artwork["Classification"], 
+                        artwork["URL"]])
+        else:
+            for i in range(1,size+1):
+                artwork = lt.getElement(tad_obras, i)
+                y.add_row([artwork["ObjectID"], artwork["Title"], 
+                        artwork["Medium"], artwork["Dimensions"], artwork["DateAcquired"],artwork["Classification"], 
+                        artwork["URL"]])
+        print(y)
 
 
 

@@ -97,7 +97,10 @@ def addObject(catalog,work):
         index = binary_search(catalog['Artists_Artworks'],int(i))
         ele = lt.getElement(catalog['Artists_Artworks'], index)
         viejos = ele["ObjectID"]
-        nuevo = viejos+","+work["ObjectID"]
+        if (viejos == None) or (viejos == ''):
+            nuevo = work["ObjectID"]
+        else:
+         nuevo = viejos+","+work["ObjectID"]
         i_insert={
             'ConstituentID':ele['ConstituentID'],
             'DisplayName':ele['DisplayName'],
@@ -261,37 +264,48 @@ def funcionReqDos(catalog, minimo, maximo):
 
 def funcionReqTres(catalog, nombre):
     index = normal_search_nombre(catalog['Artists_Artworks'],nombre)
-    autor = lt.getElement(catalog['Artists_Artworks'],index)
-    objetos = autor["ObjectID"]
-    lt_objetos = objetos.split(",")
-    ordenado = sa.sort(catalog["Artworks"], cmpobjectid)
-    tad_objetos = lt.newList("ARRAY_LIST")
-    tad_medios = lt.newList("ARRAY_LIST",cmpfunction=comparemedio)
-    for i in lt_objetos:
-        index = binary_search_id(ordenado, i)
-        elemento = lt.getElement(ordenado, index)
-        agregar = {
-            'ObjectID':elemento['ObjectID'],
-            'Title':elemento['Title'],
-            'Medium':elemento['Medium'],
-            'Dimensions':elemento['Dimensions'],
-            'DateAcquired':elemento['DateAcquired'],
-            'Department':elemento['Department'],
-            'Classification':elemento['Classification'],
-            'URL':elemento['URL']
-        }
-        lt.addLast(tad_objetos, agregar)
-        cambiarTADmedios(tad_medios,elemento['Medium'])
-    sa.sort(tad_medios,cmpcount)
-    mediorep = lt.getElement(tad_medios, 1)
-    rtafinal= lt.newList("ARRAY_LIST")
-    objetos  = lt.iterator(tad_objetos)
-    for objeto in objetos:
-        name = objeto["Medium"]
-        if (name == mediorep["Medium"]):
-            lt.addLast(rtafinal, objeto)
-    tuplarta= tad_medios,rtafinal
-    return tuplarta
+    if index != (-1):
+        autor = lt.getElement(catalog['Artists_Artworks'],index)
+        objetos = autor["ObjectID"]
+        if (objetos==None) or (objetos==''):
+            vacio = "NOHAYOBRAS"
+            tupla = vacio,vacio
+            return tupla
+        else:
+            lt_objetos = objetos.split(",")
+            ordenado = sa.sort(catalog["Artworks"], cmpobjectid)
+            tad_objetos = lt.newList("ARRAY_LIST")
+            tad_medios = lt.newList("ARRAY_LIST",cmpfunction=comparemedio)
+            for i in lt_objetos:
+                index = binary_search_id(ordenado, i)
+                elemento = lt.getElement(ordenado, index)
+                agregar = {
+                    'ObjectID':elemento['ObjectID'],
+                    'Title':elemento['Title'],
+                    'Medium':elemento['Medium'],
+                    'Dimensions':elemento['Dimensions'],
+                    'DateAcquired':elemento['DateAcquired'],
+                    'Department':elemento['Department'],
+                    'Classification':elemento['Classification'],
+                    'URL':elemento['URL']
+                }
+                lt.addLast(tad_objetos, agregar)
+                cambiarTADmedios(tad_medios,elemento['Medium'])
+            sa.sort(tad_medios,cmpcount)
+            mediorep = lt.getElement(tad_medios, 1)
+            rtafinal= lt.newList("ARRAY_LIST")
+            objetos  = lt.iterator(tad_objetos)
+            for objeto in objetos:
+                name = objeto["Medium"]
+                if (name == mediorep["Medium"]):
+                    lt.addLast(rtafinal, objeto)
+            tuplarta= tad_medios,rtafinal
+            return tuplarta
+            
+    else:
+        vacio = "NOHAYAUTOR"
+        tupla = vacio,vacio
+        return tupla
 
 
 
@@ -326,6 +340,7 @@ def normal_search_nombre(arr, x):
         name = artista["DisplayName"]
         if (name == x):
             return artist
+    return -1
 
 def binary_search_max2(arr, x):
     """
