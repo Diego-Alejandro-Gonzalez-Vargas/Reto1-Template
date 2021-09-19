@@ -126,7 +126,25 @@ def funcionReqDos(catalog, minimo, maximo):
     print(x)
 
 def funcionReqTres(catalog, nombre):
-    lista_f = controller.funcionReqTres(catalog, nombre)
+    tad_medios,tad_obras = controller.funcionReqTres(catalog, nombre)
+    size = lt.size(tad_medios)
+    x = PrettyTable()
+    
+    x.field_names = (["Medium","Count"])
+    x.max_width = 25
+    x.hrules=ALL
+
+    if size >= 5:
+        for i in range(1, 6):
+            medio = lt.getElement(tad_medios, i)
+            
+            x.add_row([medio["Medium"], medio["Count"]])
+    
+    else:
+        for i in range(1,size+1):
+            medio = lt.getElement(tad_medios, i)
+            x.add_row([medio["Medium"], medio["Count"]])
+    print(x)
 
 
 
@@ -179,7 +197,7 @@ while True:
         maximo=input(print("Fecha Final:\n"))
         funcionReqDos(catalog, minimo, maximo)
     elif int(inputs[0]) == 4:
-        nombre=input(print("Fecha Inicial:\n"))
+        nombre=input(print("Nombre:\n"))
         funcionReqTres(catalog, nombre)
     else:
         sys.exit(0)

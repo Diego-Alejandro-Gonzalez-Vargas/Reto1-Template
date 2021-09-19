@@ -266,7 +266,7 @@ def funcionReqTres(catalog, nombre):
     lt_objetos = objetos.split(",")
     ordenado = sa.sort(catalog["Artworks"], cmpobjectid)
     tad_objetos = lt.newList("ARRAY_LIST")
-    tad_medios = lt.newList("ARRAY_LIST")
+    tad_medios = lt.newList("ARRAY_LIST",cmpfunction=comparemedio)
     for i in lt_objetos:
         index = binary_search_id(ordenado, i)
         elemento = lt.getElement(ordenado, index)
@@ -282,31 +282,50 @@ def funcionReqTres(catalog, nombre):
         }
         lt.addLast(tad_objetos, agregar)
         cambiarTADmedios(tad_medios,elemento['Medium'])
+    sa.sort(tad_medios,cmpcount)
+    mediorep = lt.getElement(tad_medios, 1)
+    rtafinal= lt.newList("ARRAY_LIST")
+    objetos  = lt.iterator(tad_objetos)
+    for objeto in objetos:
+        name = objeto["Medium"]
+        if (name == mediorep["Medium"]):
+            lt.addLast(rtafinal, objeto)
+    tuplarta= tad_medios,rtafinal
+    return tuplarta
+
 
 
 def cambiarTADmedios(arr, x):
-    medios  = lt.size(arr)
-    for n in range(1, medios+1):
-        o = getElement(arr, n)
-        if (o["Medium"] == x):
-            coso= int(o["Count"])
-            cambio= coso + 1
-            cambiodict = {
-                'Medium': o["Medium"],
-                'Count': cambio
-            } 
-            lt.changeInfo(arr,n,cambiodict)
+    pos = lt.isPresent(arr,x)
+    if pos!=0:
+        o = lt.getElement(arr,pos)
+        coso= int(o["Count"])
+        cambio= coso + 1
+        cambiodict = {
+            'Medium': o["Medium"],
+            'Count': cambio
+        }
+        lt.changeInfo(arr,pos,cambiodict)
+    else:
+        nuevodict={
+            'Medium': x,
+            'Count': "1"
+        }
+        lt.addLast(arr,nuevodict)
 
-            
+def comparemedio(medio, medios):
+    if (medio.lower() in medios['name'].lower()):
+        return 0
+    return -1
         
 
 def normal_search_nombre(arr, x):
     largo  = lt.size(arr)
-
-    for artista in range(1,largo+1):
+    for artist in range(1,largo+1):
+        artista = lt.getElement(arr,artist)
         name = artista["DisplayName"]
         if (name == x):
-            return artista
+            return artist
 
 def binary_search_max2(arr, x):
     """
@@ -382,6 +401,9 @@ def binary_search_id(arr, x):
     low = 0
     high = lt.size(arr) - 1
     mid = 0
+    xdepurado = x.replace("'","")
+    xdep = xdepurado.replace(" ","")
+    xint = int(xdep)
  
     while low <= high:
  
@@ -390,11 +412,11 @@ def binary_search_id(arr, x):
         ahorasi=int(comp["ObjectID"])
  
         # If x is greater, ignore left half
-        if ahorasi < x:
+        if ahorasi < xint:
             low = mid + 1
  
         # If x is smaller, ignore right half
-        elif ahorasi > x:
+        elif ahorasi > xint:
             high = mid - 1
  
         # means x is present at mid
@@ -415,6 +437,9 @@ def cmpobjectid(iduno, iddos):
 
 def cmpFunctionIndice(artist1, artist2):
     return (int(artist1["ConstituentID"]) < int(artist2["ConstituentID"]))
+
+def cmpcount(countuno, countdos):
+    return (int(countuno["Count"])> int(countdos["Count"]))
 
 def cmpFunctionRdos(feuno, fedos):
     fechauno= feuno["DateAcquired"]
