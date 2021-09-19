@@ -72,7 +72,12 @@ def loadData(catalog):
 
 def funcionReqUno(catalog, minimo, maximo):
     ordenado= controller.funcionReqUno(catalog,minimo,maximo)
-    print("la cantidad de artistas encontrados es:" +str(lt.size(ordenado)))
+    tamanio = lt.size(ordenado)
+    print("============= Req No. 1 Inputs =============")
+    print("Artist born between " + str(minimo) + " and " + str(maximo) + "\n")
+    print("============= Req No. 1 Answer =============")
+    print("There are " + str(tamanio) + " artist born between " + str(minimo) + " and " + str(maximo) + "\n")
+    print("The first and last 3 artists in range are")
     x = PrettyTable()
     x.field_names = (["ConstituentID","DisplayName","BeginDate","Nationality","Gender","ArtistBio","Wiki QID","ULAN"])
     x.max_width = 25
@@ -95,7 +100,11 @@ def funcionReqUno(catalog, minimo, maximo):
 def funcionReqDos(catalog, minimo, maximo):
     lista_f = controller.funcionReqDos(catalog, minimo, maximo)
     size = lt.size(lista_f)
-    print("Se encontraron "+str(size)+"obras en ese rango de fechas")
+    print("============= Req No. 2 Inputs =============")
+    print("Artworks acquired betweem " + str(minimo) + " and " + str(maximo) + "\n")
+    print("============= Req No. 2 Answer =============")
+    print("There MoMA acquired " + str(size) + " unique pieces between " + str(minimo) + " and " + str(maximo) + "\n")
+    print("The first and last 3 artists in range are")
     x = PrettyTable()
     
     x.field_names = (["ObjectID","Title","Artists", "Medium", "Dimensions",
@@ -128,11 +137,20 @@ def funcionReqDos(catalog, minimo, maximo):
 def funcionReqTres(catalog, nombre):
     tad_medios,tad_obras = controller.funcionReqTres(catalog, nombre)
     if tad_medios=="NOHAYOBRAS":
-        print("NO HAY OBRAS DE ESTE AUTOR")
+        print("THERE ARE NO WORKS BY THAT AUTHOR")
     elif tad_medios=="NOHAYAUTOR":
-        print("NO existe ese AUTOR")
+        print("THE AUTHOR IS NOT REGISTERED IN THE DATA BASE")
     else:
         size = lt.size(tad_medios)
+        sizes = lt.size(tad_obras)
+        primer = lt.getElement(tad_obras,1)
+        const = primer["ConstituentID"]
+        print("============= Req No. 3 Inputs =============")
+        print("Examine the work of the artist named: " + str(nombre) + "\n")
+        print("============= Req No. 3 Answer =============")
+        print(str(nombre)+ " with MoMA ID " + str(const) + " has " + str(sizes) + "pieces in hisher name at the museum \n")
+        print("There are "+ str(size) +"different mediums in his her work")
+        print("Her his top 5 techniques are:")
         x = PrettyTable()  
         x.field_names = (["Medium","Count"])
         x.max_width = 25
@@ -147,7 +165,10 @@ def funcionReqTres(catalog, nombre):
                 medio = lt.getElement(tad_medios, i)
                 x.add_row([medio["Medium"], medio["Count"]])
         print(x)
-        sizes = lt.size(tad_obras)
+        lamas = lt.getElement(tad_medios,1)
+        usada = lamas['Medium']
+        numero = lamas['Count']
+        print("His her most used medium is: " + str(usada) + " with "+ str(numero)+"pieces")
         y = PrettyTable()
         y.field_names = (["ObjectID","Title", "Medium", "Dimensions",
                       "DateAcquired", "Classification", "URL"])

@@ -287,7 +287,8 @@ def funcionReqTres(catalog, nombre):
                     'DateAcquired':elemento['DateAcquired'],
                     'Department':elemento['Department'],
                     'Classification':elemento['Classification'],
-                    'URL':elemento['URL']
+                    'URL':elemento['URL'],
+                    'ConstituentID':elemento['ConstituentID']
                 }
                 lt.addLast(tad_objetos, agregar)
                 cambiarTADmedios(tad_medios,elemento['Medium'])
